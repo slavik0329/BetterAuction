@@ -1,0 +1,458 @@
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100015.000000000000000000 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100000.000000000000000000 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+--------------------------------------------------------------------------------------
+Test 1.1 - Incorrect parameters (0x0, BIDDINGPERIOD, RECOVERYPERIOD) - fail deployment
+betterAuction11Address=null gas=800000 gasUsed=800000 cost=0.0169140030848 block=5 txId=0xff2c2f50955f2883ccc13922c094a9dbfbdf462f8c334138b252a2333f8a1008
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100025.016914003084800000 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.983085996915200000 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+PASS Test 1.1 - Incorrect parameters (0x0, BIDDINGPERIOD, RECOVERYPERIOD) - fail deployment
+--------------------------------------------------------------------------------------
+Test 1.2 - Incorrect parameters (owner, RECOVERYPERIOD, BIDDINGPERIOD) - fail deployment
+betterAuction12Address=null gas=800000 gasUsed=800000 cost=0.0165670328096 block=7 txId=0xaa25ecf986c7fb5fa3bee095adf7355a0f139b21bae2141f310f0fcadf104acb
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100035.033481035894400000 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.966518964105600000 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+PASS Test 1.2 - Incorrect parameters (owner, RECOVERYPERIOD, BIDDINGPERIOD) - fail deployment
+--------------------------------------------------------------------------------------
+Test 1.3 - Correct parameters (owner, BIDDINGPERIOD, RECOVERYPERIOD) - pass deployment
+betterAuctionAddress=0x30da52ef30bdaec61b43317cc045e4f267eaf779 gas=800000 gasUsed=625629 cost=0.012708072724198665 block=9 txId=0x9fba39b99d1976e646af146a2c669a63226d1fba29f770d9459be24f6ffd291d
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100045.046189108618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779        0.000000000000000000 BetterAuction Contract
+contract.beneficiary=0x0014060ff383c9b21c6840a3b14aab06741e5c49
+contract.auctionStart=1491276037 Tue, 04 Apr 2017 13:20:37 AEST
+contract.biddingPeriod=240 biddingPeriodAt=1491276277 Tue, 04 Apr 2017 13:24:37 AEST
+contract.auctionEndTime=1491276277 Tue, 04 Apr 2017 13:24:37 AEST
+contract.recoveryAfterPeriod=300 recoveryAfterPeriodAt=1491276337 Tue, 04 Apr 2017 13:25:37 AEST
+contract.withdrawalTriggerAmount=0.0001 ETH
+contract.highestBidder=0x0000000000000000000000000000000000000000
+contract.highestBid=0 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+PASS Test 1.3 - Correct parameters (owner, BIDDINGPERIOD, RECOVERYPERIOD) - pass deployment
+--------------------------------------------------------------------------------------
+Test 2.1 - Bidder #1 bids 10 ETH - successful bid
+betterAuction21Tx gas=100000 gasUsed=63277 cost=0.00126554 block=11 txId=0xcbbb0b2a127c2f8817298e53ac03ffbe8f4ab3f711e195ffe036767be5dd3a47
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100055.047454648618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=10 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+PASS Test 2.1 - Bidder #1 bids 10 ETH - successful bid
+  CHECK 1. Auction contract has 10 ETH
+  CHECK 2. Highest bid is 10 ETH
+  CHECK 3. Bidder #1 balance is reduced by 10 ETH
+--------------------------------------------------------------------------------------
+Test 2.2 - Bidder #2 bids 5 ETH - failed bid
+betterAuction22Tx gas=100000 gasUsed=100000 cost=0.002 block=13 txId=0x7437e4a95a2f17e1d4b84d7551b0eca2f683fcd7d18bb14653d0e412b9b068f3
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100065.049454648618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.998000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=10 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+PASS Test 2.2 - Bidder #2 bids 5 ETH - failed bid
+  CHECK 1. Auction contract has 10 ETH
+  CHECK 2. Highest bid is 10 ETH
+  CHECK 3. Bidder #2 balance remains the same
+--------------------------------------------------------------------------------------
+Test 2.3 - Bidder #2 bids 10 ETH - bid failed
+betterAuction23Tx gas=100000 gasUsed=100000 cost=0.002 block=15 txId=0xd0072f7e5e983fa177e1e94c38c8b9c8ca79f076c562e1cecbf9bd90eccdb210
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100075.051454648618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.996000000000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=10 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+PASS Test 2.3 - Bidder #2 bids 10 ETH - failed bid
+  CHECK 1. Auction contract has 10 ETH
+  CHECK 2. Highest bid is 10 ETH
+  CHECK 3. Bidder #2 balance remains the same
+--------------------------------------------------------------------------------------
+Test 2.4 - Bidder #2 bids 10.01 ETH - successful bid
+betterAuction24Tx gas=100000 gasUsed=53487 cost=0.00106974 block=17 txId=0x1fd28618dab7c024e0f5383862ff359702f4d04e6d97dc194d9c3181cc07c145
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100090.052524388618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       20.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+contract.highestBid=10.01 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+PASS Test 2.4 - Bidder #2 bids 10.01 ETH - successful bid
+  CHECK 1. Auction contract has 20.01 ETH
+  CHECK 2. Highest bid is 10.01 ETH
+  CHECK 3. Bidder #2 balance is reduced by 10.01 ETH
+--------------------------------------------------------------------------------------
+Test 2.5 - Bidder #1 tops up bid by 0.01 ETH - failed bid
+betterAuction25Tx gas=100000 gasUsed=100000 cost=0.002 block=20 txId=0xa13d3eef2c49421a58f44dc85310454bec50eb38f5255300dfaeb7f8f239f585
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100100.054524388618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.996734460000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       20.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+contract.highestBid=10.01 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+PASS Test 2.5 - Bidder #1 tops up bid by 0.01 ETH - failed bid
+  CHECK 1. Auction contract has 20.01 ETH
+  CHECK 2. Highest bid is 10.01 ETH
+  CHECK 3. Bidder #1 balance remains the same
+--------------------------------------------------------------------------------------
+Test 2.6 - Bidder #1 tops up bid by 1 ETH - successful bid
+betterAuction26Tx gas=100000 gasUsed=43733 cost=0.00087466 block=22 txId=0x5d4f0f75a7e5ba865a1b53d0b7de7a02160a11bb132954febca1b92c357782f6
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100110.055399048618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       21.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=11 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+PASS Test 2.6 - Bidder #1 tops up bid by 1 ETH - successful bid
+  CHECK 1. Auction contract has 21.01 ETH
+  CHECK 2. Highest bid is 11 ETH
+  CHECK 3. Bidder #1 balance is reduced by 1 ETH
+--------------------------------------------------------------------------------------
+Test 2.7 - Bidder #3 bids 13 ETH - successful bid
+betterAuction27Tx gas=100000 gasUsed=53487 cost=0.00106974 block=24 txId=0x825f953c97e6a6e04d7f8bfd67a5f0d6be424a1aaa7efd511c974dc1d14c666b
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100120.056468788618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.998930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       34.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.7 - Bidder #3 bids 13 ETH - successful bid
+  CHECK 1. Auction contract has 34.01 ETH
+  CHECK 2. Highest bid is 13 ETH
+  CHECK 3. Bidder #3 balance is reduced by 13 ETH
+--------------------------------------------------------------------------------------
+Test 2.8 - Bidder #3 withdraws funds - unsuccessful withdrawal
+betterAuction28Tx gas=100000 gasUsed=100000 cost=0.002 block=26 txId=0xbafa43142b247b37e89587d94ea92db208cabfb0edfbcf7521fffd1e52ec0571
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100130.058468788618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       34.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.8 - Bidder #3 withdraws funds - unsuccessful withdrawal
+  CHECK 1. Auction contract has 34.01 ETH
+  CHECK 2. Highest bid is 13 ETH
+  CHECK 3. Bidder #3 balance remains the same
+--------------------------------------------------------------------------------------
+Test 2.9 - Bidder #1 withdraws funds - successful withdrawal
+betterAuction29Tx gas=100000 gasUsed=18249 cost=0.00036498 block=28 txId=0xadbeef00f88b7d5ba94c73826407f10a30666b82f94ef241a49fb4514cd05223
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100140.058833768618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       23.010000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.9 - Bidder #1 withdraws funds - successful withdrawal
+  CHECK 1. Auction contract has 23.01 ETH
+  CHECK 2. Highest bid is 13 ETH
+  CHECK 3. Bidder #1 balance increases by 11 ETH
+--------------------------------------------------------------------------------------
+Test 2.10 - Bidder #2 withdraws funds by calling nonHighestBidderRefund() with 0 ETH - successful withdrawal
+betterAuction210Tx gas=100000 gasUsed=18689 cost=0.00037378 block=30 txId=0xaf6188115c92a84e6d5b007b74165ff008c6eb636dc2c9326f0e39a0d0d09d32
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100150.059207548618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.10 - Bidder #2 withdraws funds by calling nonHighestBidderRefund() with 0 ETH - successful withdrawal
+  CHECK 1. Auction contract has 13 ETH
+  CHECK 2. Highest bid is 13 ETH
+  CHECK 3. Bidder #2 balance increases by 10.01 ETH
+--------------------------------------------------------------------------------------
+Test 2.11 - Bidder #3 calls the internal BidderUpdateBid function with 20 ETH - unsuccessful call
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100150.059207548618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.11 - Bidder #3 calls the internal BidderUpdateBid function with 20 ETH - unsuccessful call
+  CHECK 1. Auction contract has 13 ETH
+  CHECK 2. Highest bid is 13 ETH
+  CHECK 3. Bidder #3 balance remains the same
+--------------------------------------------------------------------------------------
+Test 2.12 - Owner calls beneficiaryCloseAuction() before auction closes - unsuccessful
+betterAuction212Tx gas=100000 gasUsed=100000 cost=0.002 block=32 txId=0xf17a8b542f91e95cfd9190e8517896beeec500e3dff64a353ff2b7faa4307d3f
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100160.061207548618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.951810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.12 - Owner calls beneficiaryCloseAuction() before auction closes - unsuccessful
+  CHECK 1. Auction contract has 13 ETH
+  CHECK 2. Highest bid is 13 ETH
+--------------------------------------------------------------------------------------
+Test 2.13 - Owner calls beneficiaryRecoverFunds() before recovery period is active - unsuccessful
+betterAuction213Tx gas=100000 gasUsed=100000 cost=0.002 block=34 txId=0xacbc23a57002d6cd427dfe6def861fb6573a812db95464bdaae1d03d247455f8
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100170.063207548618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+contract.highestBid=13 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+PASS Test 2.13 - Owner calls beneficiaryRecoverFunds() before recovery period is active - unsuccessful
+  CHECK 1. Auction contract has 13 ETH
+  CHECK 2. Highest bid is 13 ETH
+--------------------------------------------------------------------------------------
+Test 2.14 - Bidder #2 bids 50 ETH - successful bid
+betterAuction214Tx gas=100000 gasUsed=53487 cost=0.00106974 block=37 txId=0xc7b05e714907f544e1b6b5f1ae79ed91f513115094466bf1ab7ce300407b6d0d
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100185.064277288618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       63.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+contract.highestBid=50 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+PASS Test 2.14 - Bidder #2 bids 50 ETH - successful bid
+  CHECK 1. Auction contract has 63 ETH
+  CHECK 2. Highest bid is 50 ETH
+  CHECK 3. Bidder #2 balance is reduced by 50 ETH
+--------------------------------------------------------------------------------------
+Test 2.15 - Bidder #1 bids 100 ETH - successful bid
+betterAuction215Tx gas=100000 gasUsed=53487 cost=0.00106974 block=39 txId=0x21835af70bb78894b5c4c13a8420a2822c6d6afee1900a8111b9d4f65562d73b
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100195.065347028618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779      163.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=100 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+PASS Test 2.15 - Bidder #1 bids 100 ETH - successful bid
+  CHECK 1. Auction contract has 163 ETH
+  CHECK 2. Highest bid is 100 ETH
+  CHECK 3. Bidder #1 balance is reduced by 100 ETH
+--------------------------------------------------------------------------------------
+Test 3.1 - Owner calls beneficiaryCloseAuction() after auction closes - successful
+Waiting until auction closes at 1491276277 Tue, 04 Apr 2017 13:24:37 AEST currentDate=Tue, 04 Apr 2017 13:21:51 AEST
+Waited until auction closed at 1491276277 Tue, 04 Apr 2017 13:24:37 AEST currentDate=Tue, 04 Apr 2017 13:24:37 AEST
+betterAuction31Tx gas=100000 gasUsed=50381 cost=0.00100762 block=108 txId=0x8ab2549a38f734f681ddabb1c719ee337e2b35b2cc82fb3ae872b78dad80d002
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100540.066354648618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100099.948803271381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       63.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=100 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+PASS Test 3.1 - Owner calls beneficiaryCloseAuction() after auction closes - successful
+  CHECK 1. Auction contract has 63 ETH
+  CHECK 2. Owner balance is increased by 100 ETH
+--------------------------------------------------------------------------------------
+Test 3.2 - Bidder #2 withdraws funds - successful withdrawal
+betterAuction32Tx gas=100000 gasUsed=18249 cost=0.00036498 block=110 txId=0x63b245721af9773e35a7ca901b7ae0080c7d257b02437cf602aa62becc837c81
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100550.066719628618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100099.948803271381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.993121760000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=100 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+PASS Test 3.2 - Bidder #2 withdraws funds - successful withdrawal
+  CHECK 1. Auction contract has 13 ETH
+  CHECK 3. Bidder #2 balance increases by 50 ETH
+--------------------------------------------------------------------------------------
+Test 3.3 - Owner calls beneficiaryRecoverFunds() when auction recovery period is active - successful
+Waiting until recovery period is active at 1491276337 Tue, 04 Apr 2017 13:25:37 AEST currentDate=Tue, 04 Apr 2017 13:24:52 AEST
+Waited until recovery period is active at 1491276337 Tue, 04 Apr 2017 13:25:37 AEST currentDate=Tue, 04 Apr 2017 13:25:37 AEST
+betterAuction33Tx gas=100000 gasUsed=28841 cost=0.00057682 block=121 txId=0xfa61df963ea1a5fcbd3e830b6ce5806191f1a13d13eacd8596908005f392cb3b
+# Account                                                   EtherBalance Name
+1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100605.067296448618598665 Account #0 - Miner
+2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100112.948226451381401335 Account #1 - Owner / Beneficiary
+3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.993121760000000000 Account #3 - Bidder #2
+5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+6 0x30da52ef30bdaec61b43317cc045e4f267eaf779        0.000000000000000000 BetterAuction Contract
+contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+contract.highestBid=100 ETH
+bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+PASS Test 3.3 - Owner calls beneficiaryRecoverFunds() when auction recovery period is active - successful
+  CHECK 1. Auction contract has 0 ETH
+  CHECK 2. Owner balance is increased by 13 ETH

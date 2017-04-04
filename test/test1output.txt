@@ -1,0 +1,1164 @@
+Welcome to the Geth JavaScript console!
+
+instance: Geth/v1.6.0-unstable-f3579f64/darwin/go1.8
+coinbase: 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e
+at block: 0 (Thu, 01 Jan 1970 10:00:00 AEST)
+ datadir: /Users/bok/BetterAuction/test/testchain
+ modules: admin:1.0 debug:1.0 eth:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+
+> 
+true
+> 
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100015.000000000000000000 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100000.000000000000000000 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+undefined
+> 
+> 
+undefined
+> 
+true
+> 
+betterAuctionSource=pragma solidity ^0.4.8;contract BetterAuction { address public beneficiary; uint256 public auctionStart; uint256 public biddingPeriod; uint256 public recoveryAfterPeriod; uint256 public constant WITHDRAWAL_TRIGGER_AMOUNT = 100000000000000; address public highestBidder; uint256 public highestBid; mapping(address => uint256) pendingReturns; bool auctionClosed; modifier isBeneficiary { if (msg.sender != beneficiary) throw; _; } modifier isAuctionActive { if (now < auctionStart || now > (auctionStart + biddingPeriod)) throw; _; } modifier isAuctionEnded { if (now < (auctionStart + biddingPeriod)) throw; _; } modifier isRecoveryActive { if (now < (auctionStart + recoveryAfterPeriod)) throw; _; } event HighestBidIncreased(address bidder, uint256 amount); event AuctionClosed(address winner, uint256 amount); function BetterAuction( address _beneficiary, uint256 _biddingPeriod, uint256 _recoveryAfterPeriod ) { if (_beneficiary == 0) throw; beneficiary = _beneficiary; auctionStart = now; if (_biddingPeriod > _recoveryAfterPeriod) throw; biddingPeriod = _biddingPeriod; recoveryAfterPeriod = _recoveryAfterPeriod; } function auctionEndTime() constant returns (uint256) { return auctionStart + biddingPeriod; } function getBid(address _address) constant returns (uint256) { if (_address == highestBidder) { return highestBid; } else { return pendingReturns[_address]; } } function bidderUpdateBid() internal { if (msg.sender == highestBidder) { highestBid += msg.value; HighestBidIncreased(msg.sender, highestBid); } else if (pendingReturns[msg.sender] + msg.value > highestBid) { var amount = pendingReturns[msg.sender] + msg.value; pendingReturns[msg.sender] = 0; pendingReturns[highestBidder] = highestBid; highestBid = amount; highestBidder = msg.sender; HighestBidIncreased(msg.sender, amount); } else { throw; } } function bidderPlaceBid() isAuctionActive payable { if ((pendingReturns[msg.sender] > 0 || msg.sender == highestBidder) && msg.value > 0) { bidderUpdateBid(); } else { if (msg.value <= highestBid) throw; if (highestBidder != 0) { pendingReturns[highestBidder] = highestBid; } highestBidder = msg.sender; highestBid = msg.value; HighestBidIncreased(msg.sender, msg.value); } } function beneficiaryRecoverFunds() isBeneficiary isRecoveryActive { if (!beneficiary.send(this.balance)) throw; } function nonHighestBidderRefund() payable { var amount = pendingReturns[msg.sender]; if (amount > 0) { pendingReturns[msg.sender] = 0; if (!msg.sender.send(amount + msg.value)) throw; } else { throw; } } function beneficiaryCloseAuction() isBeneficiary isAuctionEnded { if (auctionClosed) throw; auctionClosed = true; AuctionClosed(highestBidder, highestBid); if (!beneficiary.send(highestBid)) throw; } function () payable { if (msg.value == WITHDRAWAL_TRIGGER_AMOUNT) { nonHighestBidderRefund(); } else { bidderPlaceBid(); } }}
+undefined
+> 
+undefined
+> 
+undefined
+> 
+----------v betterAuctionCompiled v----------
+undefined
+> 
+{
+  <stdin>:BetterAuction: {
+    code: "0x6060604052341561000c57fe5b6040516060806107a18339810160409081528151602083015191909201515b600160a060020a038316151561004057610000565b60008054600160a060020a031916600160a060020a038516179055426001558082111561006c57610000565b600282905560038190555b5050505b6107178061008a6000396000f300606060405236156100a95763ffffffff60e060020a600035041663089c22ad81146100d657806338af3eed146100f85780634b449cba146101245780634d804e60146101465780634f245ef7146101685780635d7db95d1461018a5780635f8909bd1461019c5780636bd61a66146101be5780637f0a1bed146101c857806391f90157146101d2578063951504c5146101fe578063c8b342ab14610210578063d57bde791461023e575b6100d45b655af3107a40003414156100c8576100c3610260565b6100d0565b6100d06102d0565b5b5b565b005b34156100de57fe5b6100e66103ef565b60408051918252519081900360200190f35b341561010057fe5b6101086103f5565b60408051600160a060020a039092168252519081900360200190f35b341561012c57fe5b6100e6610404565b60408051918252519081900360200190f35b341561014e57fe5b6100e661040f565b60408051918252519081900360200190f35b341561017057fe5b6100e6610419565b60408051918252519081900360200190f35b341561019257fe5b6100d461041f565b005b34156101a457fe5b6100e66104ef565b60408051918252519081900360200190f35b6100d4610260565b005b6100d46102d0565b005b34156101da57fe5b6101086104f5565b60408051600160a060020a039092168252519081900360200190f35b341561020657fe5b6100d4610504565b005b341561021857fe5b6100e6600160a060020a0360043516610570565b60408051918252519081900360200190f35b341561024657fe5b6100e66105b3565b60408051918252519081900360200190f35b600160a060020a033316600090815260066020526040812054908111156102c757600160a060020a0333166000818152600660205260408082208290555134840180156108fc0292909190818181858888f1935050505015156102c257610000565b6102cc565b610000565b5b50565b6001544210806102e557506002546001540142115b156102ef57610000565b600160a060020a0333166000908152600660205260408120541180610322575060045433600160a060020a039081169116145b801561032e5750600034115b15610340576100c36105b9565b6100d0565b600554341161034e57610000565b600454600160a060020a03161561037e57600554600454600160a060020a03166000908152600660205260409020555b6004805473ffffffffffffffffffffffffffffffffffffffff191633600160a060020a031690811790915534600581905560408051928352602083019190915280517ff4757a49b326036464bec6fe419a4ae38c8a02ce3e68bf0809674f6aab8ad3009281900390910190a15b5b5b565b60035481565b600054600160a060020a031681565b600254600154015b90565b655af3107a400081565b60015481565b60005433600160a060020a0390811691161461043a57610000565b6002546001540142101561044d57610000565b60075460ff161561045d57610000565b6007805460ff1916600117905560045460055460408051600160a060020a039093168352602083019190915280517f1d78ca6377547e2f5434a04066a4dcac7670fd77e146b686b06bf8fbc06fb4359281900390910190a160008054600554604051600160a060020a039092169281156108fc029290818181858888f1935050505015156100d057610000565b5b5b5b565b60025481565b600454600160a060020a031681565b60005433600160a060020a0390811691161461051f57610000565b6003546001540142101561053257610000565b60008054604051600160a060020a0391821692309092163180156108fc0292909190818181858888f1935050505015156100d057610000565b5b5b5b565b600454600090600160a060020a038381169116141561059257506005546105ad565b50600160a060020a0381166000908152600660205260409020545b5b919050565b60055481565b60045460009033600160a060020a0390811691161415610626576005805434019081905560408051600160a060020a0333168152602081019290925280517ff4757a49b326036464bec6fe419a4ae38c8a02ce3e68bf0809674f6aab8ad3009281900390910190a16102cc565b600554600160a060020a033316600090815260066020526040902054340111156102c75750600160a060020a033381166000818152600660209081526040808320805490849055600580546004805490981686529483902094909455340192839055845473ffffffffffffffffffffffffffffffffffffffff1916841790945583519283528201819052825190927ff4757a49b326036464bec6fe419a4ae38c8a02ce3e68bf0809674f6aab8ad300928290030190a16102cc565b610000565b5b5b505600a165627a7a723058200c70e876add7e358a6ff7796fbcd98db50e34c5a0d6de3691868b650df829f7e0029",
+    info: {
+      abiDefinition: [{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}],
+      compilerOptions: "--combined-json bin,abi,userdoc,devdoc --add-std --optimize",
+      compilerVersion: "0.4.9",
+      developerDoc: {
+        methods: {}
+      },
+      language: "Solidity",
+      languageVersion: "0.4.9",
+      source: "pragma solidity ^0.4.8;contract BetterAuction { address public beneficiary; uint256 public auctionStart; uint256 public biddingPeriod; uint256 public recoveryAfterPeriod; uint256 public constant WITHDRAWAL_TRIGGER_AMOUNT = 100000000000000; address public highestBidder; uint256 public highestBid; mapping(address => uint256) pendingReturns; bool auctionClosed; modifier isBeneficiary { if (msg.sender != beneficiary) throw; _; } modifier isAuctionActive { if (now < auctionStart || now > (auctionStart + biddingPeriod)) throw; _; } modifier isAuctionEnded { if (now < (auctionStart + biddingPeriod)) throw; _; } modifier isRecoveryActive { if (now < (auctionStart + recoveryAfterPeriod)) throw; _; } event HighestBidIncreased(address bidder, uint256 amount); event AuctionClosed(address winner, uint256 amount); function BetterAuction( address _beneficiary, uint256 _biddingPeriod, uint256 _recoveryAfterPeriod ) { if (_beneficiary == 0) throw; beneficiary = _beneficiary; auctionStart = now; if (_biddingPeriod > _recoveryAfterPeriod) throw; biddingPeriod = _biddingPeriod; recoveryAfterPeriod = _recoveryAfterPeriod; } function auctionEndTime() constant returns (uint256) { return auctionStart + biddingPeriod; } function getBid(address _address) constant returns (uint256) { if (_address == highestBidder) { return highestBid; } else { return pendingReturns[_address]; } } function bidderUpdateBid() internal { if (msg.sender == highestBidder) { highestBid += msg.value; HighestBidIncreased(msg.sender, highestBid); } else if (pendingReturns[msg.sender] + msg.value > highestBid) { var amount = pendingReturns[msg.sender] + msg.value; pendingReturns[msg.sender] = 0; pendingReturns[highestBidder] = highestBid; highestBid = amount; highestBidder = msg.sender; HighestBidIncreased(msg.sender, amount); } else { throw; } } function bidderPlaceBid() isAuctionActive payable { if ((pendingReturns[msg.sender] > 0 || msg.sender == highestBidder) && msg.value > 0) { bidderUpdateBid(); } else { if (msg.value <= highestBid) throw; if (highestBidder != 0) { pendingReturns[highestBidder] = highestBid; } highestBidder = msg.sender; highestBid = msg.value; HighestBidIncreased(msg.sender, msg.value); } } function beneficiaryRecoverFunds() isBeneficiary isRecoveryActive { if (!beneficiary.send(this.balance)) throw; } function nonHighestBidderRefund() payable { var amount = pendingReturns[msg.sender]; if (amount > 0) { pendingReturns[msg.sender] = 0; if (!msg.sender.send(amount + msg.value)) throw; } else { throw; } } function beneficiaryCloseAuction() isBeneficiary isAuctionEnded { if (auctionClosed) throw; auctionClosed = true; AuctionClosed(highestBidder, highestBid); if (!beneficiary.send(highestBid)) throw; } function () payable { if (msg.value == WITHDRAWAL_TRIGGER_AMOUNT) { nonHighestBidderRefund(); } else { bidderPlaceBid(); } }}",
+      userDoc: {
+        methods: {}
+      }
+    }
+  }
+}
+> 
+----------^ betterAuctionCompiled ^----------
+undefined
+> 
+DATA: betterAuctionABI=[{"constant":true,"inputs":[],"name":"recoveryAfterPeriod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"beneficiary","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"auctionEndTime","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"WITHDRAWAL_TRIGGER_AMOUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"auctionStart","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"beneficiaryCloseAuction","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"biddingPeriod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"nonHighestBidderRefund","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[],"name":"bidderPlaceBid","outputs":[],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"highestBidder","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"beneficiaryRecoverFunds","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_address","type":"address"}],"name":"getBid","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"highestBid","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[{"name":"_beneficiary","type":"address"},{"name":"_biddingPeriod","type":"uint256"},{"name":"_recoveryAfterPeriod","type":"uint256"}],"payable":false,"type":"constructor"},{"payable":true,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bidder","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"HighestBidIncreased","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"AuctionClosed","type":"event"}]
+undefined
+> 
+> 
+undefined
+> 
+undefined
+> 
+> 
+... 
+... 
+... 
+... 
+... 
+...... 
+...... 
+......... 
+............ 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............ 
+......... 
+...... 
+... 
+...... 
+... 
+... 
+... 
+...... 
+...... 
+...... 
+...... 
+... 
+RESULT: --------------------------------------------------------------------------------------
+RESULT: Test 1.1 - Incorrect parameters (0x0, BIDDINGPERIOD, RECOVERYPERIOD) - fail deployment
+betterAuction11Tx=0xff2c2f50955f2883ccc13922c094a9dbfbdf462f8c334138b252a2333f8a1008
+RESULT: betterAuction11Address=null gas=800000 gasUsed=800000 cost=0.0169140030848 block=5 txId=0xff2c2f50955f2883ccc13922c094a9dbfbdf462f8c334138b252a2333f8a1008
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100025.016914003084800000 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.983085996915200000 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: PASS Test 1.1 - Incorrect parameters (0x0, BIDDINGPERIOD, RECOVERYPERIOD) - fail deployment
+undefined
+> 
+> 
+... 
+... 
+... 
+... 
+... 
+...... 
+...... 
+......... 
+............ 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............... 
+............ 
+......... 
+...... 
+... 
+...... 
+... 
+... 
+... 
+...... 
+...... 
+...... 
+...... 
+... 
+RESULT: --------------------------------------------------------------------------------------
+RESULT: Test 1.2 - Incorrect parameters (owner, RECOVERYPERIOD, BIDDINGPERIOD) - fail deployment
+betterAuction12Tx=0xaa25ecf986c7fb5fa3bee095adf7355a0f139b21bae2141f310f0fcadf104acb
+RESULT: betterAuction12Address=null gas=800000 gasUsed=800000 cost=0.0165670328096 block=7 txId=0xaa25ecf986c7fb5fa3bee095adf7355a0f139b21bae2141f310f0fcadf104acb
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100035.033481035894400000 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.966518964105600000 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: PASS Test 1.2 - Incorrect parameters (owner, RECOVERYPERIOD, BIDDINGPERIOD) - fail deployment
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 1.3 - Correct parameters (owner, BIDDINGPERIOD, RECOVERYPERIOD) - pass deployment
+undefined
+> 
+undefined
+> 
+undefined
+> 
+... 
+... 
+...... 
+......... 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+......... 
+...... 
+... 
+betterAuction13Tx=0x9fba39b99d1976e646af146a2c669a63226d1fba29f770d9459be24f6ffd291d
+undefined
+> 
+... 
+undefined
+> 
+DATA: betterAuctionAddress=0x30da52ef30bdaec61b43317cc045e4f267eaf779
+RESULT: betterAuctionAddress=0x30da52ef30bdaec61b43317cc045e4f267eaf779 gas=800000 gasUsed=625629 cost=0.012708072724198665 block=9 txId=0x9fba39b99d1976e646af146a2c669a63226d1fba29f770d9459be24f6ffd291d
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100045.046189108618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171   100000.000000000000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779        0.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.beneficiary=0x0014060ff383c9b21c6840a3b14aab06741e5c49
+RESULT: contract.auctionStart=1491276037 Tue, 04 Apr 2017 13:20:37 AEST
+RESULT: contract.biddingPeriod=240 biddingPeriodAt=1491276277 Tue, 04 Apr 2017 13:24:37 AEST
+RESULT: contract.auctionEndTime=1491276277 Tue, 04 Apr 2017 13:24:37 AEST
+RESULT: contract.recoveryAfterPeriod=300 recoveryAfterPeriodAt=1491276337 Tue, 04 Apr 2017 13:25:37 AEST
+RESULT: contract.withdrawalTriggerAmount=0.0001 ETH
+undefined
+> 
+RESULT: contract.highestBidder=0x0000000000000000000000000000000000000000
+RESULT: contract.highestBid=0 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 1.3 - Correct parameters (owner, BIDDINGPERIOD, RECOVERYPERIOD) - pass deployment
+undefined
+> 
+> 
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.1 - Bidder #1 bids 10 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction21Tx gas=100000 gasUsed=63277 cost=0.00126554 block=11 txId=0xcbbb0b2a127c2f8817298e53ac03ffbe8f4ab3f711e195ffe036767be5dd3a47
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100055.047454648618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b   100000.000000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=10 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.1 - Bidder #1 bids 10 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 10 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 10 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #1 balance is reduced by 10 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.2 - Bidder #2 bids 5 ETH - failed bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction22Tx gas=100000 gasUsed=100000 cost=0.002 block=13 txId=0x7437e4a95a2f17e1d4b84d7551b0eca2f683fcd7d18bb14653d0e412b9b068f3
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100065.049454648618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.998000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=10 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.2 - Bidder #2 bids 5 ETH - failed bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 10 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 10 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance remains the same
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.3 - Bidder #2 bids 10 ETH - bid failed
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction23Tx gas=100000 gasUsed=100000 cost=0.002 block=15 txId=0xd0072f7e5e983fa177e1e94c38c8b9c8ca79f076c562e1cecbf9bd90eccdb210
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100075.051454648618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.996000000000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       10.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=10 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.3 - Bidder #2 bids 10 ETH - failed bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 10 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 10 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance remains the same
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.4 - Bidder #2 bids 10.01 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction24Tx gas=100000 gasUsed=53487 cost=0.00106974 block=17 txId=0x1fd28618dab7c024e0f5383862ff359702f4d04e6d97dc194d9c3181cc07c145
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100090.052524388618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.998734460000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       20.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+RESULT: contract.highestBid=10.01 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.4 - Bidder #2 bids 10.01 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 20.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 10.01 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance is reduced by 10.01 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.5 - Bidder #1 tops up bid by 0.01 ETH - failed bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction25Tx gas=100000 gasUsed=100000 cost=0.002 block=20 txId=0xa13d3eef2c49421a58f44dc85310454bec50eb38f5255300dfaeb7f8f239f585
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100100.054524388618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99989.996734460000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       20.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+RESULT: contract.highestBid=10.01 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 10 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.5 - Bidder #1 tops up bid by 0.01 ETH - failed bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 20.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 10.01 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #1 balance remains the same
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.6 - Bidder #1 tops up bid by 1 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction26Tx gas=100000 gasUsed=43733 cost=0.00087466 block=22 txId=0x5d4f0f75a7e5ba865a1b53d0b7de7a02160a11bb132954febca1b92c357782f6
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100110.055399048618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c   100000.000000000000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       21.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=11 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 0 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.6 - Bidder #1 tops up bid by 1 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 21.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 11 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #1 balance is reduced by 1 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.7 - Bidder #3 bids 13 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction27Tx gas=100000 gasUsed=53487 cost=0.00106974 block=24 txId=0x825f953c97e6a6e04d7f8bfd67a5f0d6be424a1aaa7efd511c974dc1d14c666b
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100120.056468788618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.998930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       34.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.7 - Bidder #3 bids 13 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 34.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #3 balance is reduced by 13 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.8 - Bidder #3 withdraws funds - unsuccessful withdrawal
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction28Tx gas=100000 gasUsed=100000 cost=0.002 block=26 txId=0xbafa43142b247b37e89587d94ea92db208cabfb0edfbcf7521fffd1e52ec0571
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100130.058468788618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99988.995859800000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       34.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 11 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.8 - Bidder #3 withdraws funds - unsuccessful withdrawal
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 34.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #3 balance remains the same
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.9 - Bidder #1 withdraws funds - successful withdrawal
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction29Tx gas=100000 gasUsed=18249 cost=0.00036498 block=28 txId=0xadbeef00f88b7d5ba94c73826407f10a30666b82f94ef241a49fb4514cd05223
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100140.058833768618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99989.984930260000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       23.010000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 10.01 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.9 - Bidder #1 withdraws funds - successful withdrawal
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 23.01 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #1 balance increases by 11 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.10 - Bidder #2 withdraws funds by calling nonHighestBidderRefund() with 0 ETH - successful withdrawal
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction210Tx gas=100000 gasUsed=18689 cost=0.00037378 block=30 txId=0xaf6188115c92a84e6d5b007b74165ff008c6eb636dc2c9326f0e39a0d0d09d32
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100150.059207548618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.10 - Bidder #2 withdraws funds by calling nonHighestBidderRefund() with 0 ETH - successful withdrawal
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 13 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance increases by 10.01 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.11 - Bidder #3 calls the internal BidderUpdateBid function with 20 ETH - unsuccessful call
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+Error: Cannot send value to non-payable function
+    at web3.js:4057:19
+    at apply (<native code>)
+    at web3.js:4147:16
+    at <anonymous>:1:26
+
+> 
+... 
+undefined
+> 
+... 
+... 
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100150.059207548618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.953810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.11 - Bidder #3 calls the internal BidderUpdateBid function with 20 ETH - unsuccessful call
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 13 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #3 balance remains the same
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.12 - Owner calls beneficiaryCloseAuction() before auction closes - unsuccessful
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction212Tx gas=100000 gasUsed=100000 cost=0.002 block=32 txId=0xf17a8b542f91e95cfd9190e8517896beeec500e3dff64a353ff2b7faa4307d3f
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100160.061207548618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.951810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.12 - Owner calls beneficiaryCloseAuction() before auction closes - unsuccessful
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 13 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.13 - Owner calls beneficiaryRecoverFunds() before recovery period is active - unsuccessful
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction213Tx gas=100000 gasUsed=100000 cost=0.002 block=34 txId=0xacbc23a57002d6cd427dfe6def861fb6573a812db95464bdaae1d03d247455f8
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100170.063207548618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.994556480000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x004e64833635cd1056b948b57286b7c91e62731c
+RESULT: contract.highestBid=13 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.13 - Owner calls beneficiaryRecoverFunds() before recovery period is active - unsuccessful
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 13 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 13 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.14 - Bidder #2 bids 50 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction214Tx gas=100000 gasUsed=53487 cost=0.00106974 block=37 txId=0xc7b05e714907f544e1b6b5f1ae79ed91f513115094466bf1ab7ce300407b6d0d
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100185.064277288618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99999.995494820000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       63.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0036f6addb6d64684390f55a92f0f4988266901b
+RESULT: contract.highestBid=50 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 0 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+RESULT: HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.14 - Bidder #2 bids 50 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 63 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 50 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance is reduced by 50 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 2.15 - Bidder #1 bids 100 ETH - successful bid
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction215Tx gas=100000 gasUsed=53487 cost=0.00106974 block=39 txId=0x21835af70bb78894b5c4c13a8420a2822c6d6afee1900a8111b9d4f65562d73b
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100195.065347028618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49    99999.949810891381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779      163.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=100 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+RESULT: HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+RESULT: HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 2.15 - Bidder #1 bids 100 ETH - successful bid
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 163 ETH
+undefined
+> 
+RESULT:   CHECK 2. Highest bid is 100 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #1 balance is reduced by 100 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 3.1 - Owner calls beneficiaryCloseAuction() after auction closes - successful
+undefined
+> 
+undefined
+> 
+undefined
+> 
+RESULT: Waiting until auction closes at 1491276277 Tue, 04 Apr 2017 13:24:37 AEST currentDate=Tue, 04 Apr 2017 13:21:51 AEST
+undefined
+> 
+... 
+undefined
+> 
+RESULT: Waited until auction closed at 1491276277 Tue, 04 Apr 2017 13:24:37 AEST currentDate=Tue, 04 Apr 2017 13:24:37 AEST
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction31Tx gas=100000 gasUsed=50381 cost=0.00100762 block=108 txId=0x8ab2549a38f734f681ddabb1c719ee337e2b35b2cc82fb3ae872b78dad80d002
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100540.066354648618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100099.948803271381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99949.993486740000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       63.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=100 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 50 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+RESULT: HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+RESULT: HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+RESULT: AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 3.1 - Owner calls beneficiaryCloseAuction() after auction closes - successful
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 63 ETH
+undefined
+> 
+RESULT:   CHECK 2. Owner balance is increased by 100 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 3.2 - Bidder #2 withdraws funds - successful withdrawal
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction32Tx gas=100000 gasUsed=18249 cost=0.00036498 block=110 txId=0x63b245721af9773e35a7ca901b7ae0080c7d257b02437cf602aa62becc837c81
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100550.066719628618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100099.948803271381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.993121760000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779       13.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=100 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+RESULT: HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+RESULT: HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+RESULT: AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 3.2 - Bidder #2 withdraws funds - successful withdrawal
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 13 ETH
+undefined
+> 
+RESULT:   CHECK 3. Bidder #2 balance increases by 50 ETH
+undefined
+> 
+> 
+RESULT: --------------------------------------------------------------------------------------
+undefined
+> 
+RESULT: Test 3.3 - Owner calls beneficiaryRecoverFunds() when auction recovery period is active - successful
+undefined
+> 
+undefined
+> 
+undefined
+> 
+RESULT: Waiting until recovery period is active at 1491276337 Tue, 04 Apr 2017 13:25:37 AEST currentDate=Tue, 04 Apr 2017 13:24:52 AEST
+undefined
+> 
+... 
+undefined
+> 
+RESULT: Waited until recovery period is active at 1491276337 Tue, 04 Apr 2017 13:25:37 AEST currentDate=Tue, 04 Apr 2017 13:25:37 AEST
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT: betterAuction33Tx gas=100000 gasUsed=28841 cost=0.00057682 block=121 txId=0xfa61df963ea1a5fcbd3e830b6ce5806191f1a13d13eacd8596908005f392cb3b
+undefined
+> 
+RESULT: # Account                                                   EtherBalance Name
+RESULT: 1 0x000d1009bd8f0b1301cc5edc28ed1222a3ce671e   100605.067296448618598665 Account #0 - Miner
+RESULT: 2 0x0014060ff383c9b21c6840a3b14aab06741e5c49   100112.948226451381401335 Account #1 - Owner / Beneficiary
+RESULT: 3 0x0020017ba4c67f76c76b1af8c41821ee54f37171    99899.994425080000000000 Account #2 - Bidder #1
+RESULT: 4 0x0036f6addb6d64684390f55a92f0f4988266901b    99999.993121760000000000 Account #3 - Bidder #2
+RESULT: 5 0x004e64833635cd1056b948b57286b7c91e62731c    99986.996930260000000000 Account #4 - Bidder #3
+RESULT: 6 0x30da52ef30bdaec61b43317cc045e4f267eaf779        0.000000000000000000 BetterAuction Contract
+undefined
+> 
+RESULT: contract.highestBidder=0x0020017ba4c67f76c76b1af8c41821ee54f37171
+RESULT: contract.highestBid=100 ETH
+RESULT: bid by 0x0020017ba4c67f76c76b1af8c41821ee54f37171 is 100 ETH
+RESULT: bid by 0x0036f6addb6d64684390f55a92f0f4988266901b is 0 ETH
+RESULT: bid by 0x004e64833635cd1056b948b57286b7c91e62731c is 13 ETH
+RESULT: HighestBidIncreased Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 10 block 11
+RESULT: HighestBidIncreased Event 1: 0x0036f6addb6d64684390f55a92f0f4988266901b 10.01 block 17
+RESULT: HighestBidIncreased Event 2: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 11 block 22
+RESULT: HighestBidIncreased Event 3: 0x004e64833635cd1056b948b57286b7c91e62731c 13 block 24
+RESULT: HighestBidIncreased Event 4: 0x0036f6addb6d64684390f55a92f0f4988266901b 50 block 37
+RESULT: HighestBidIncreased Event 5: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 39
+RESULT: AuctionClosed Event 0: 0x0020017ba4c67f76c76b1af8c41821ee54f37171 100 block 108
+undefined
+> 
+... 
+... 
+... 
+... 
+RESULT: PASS Test 3.3 - Owner calls beneficiaryRecoverFunds() when auction recovery period is active - successful
+undefined
+> 
+RESULT:   CHECK 1. Auction contract has 0 ETH
+undefined
+> 
+RESULT:   CHECK 2. Owner balance is increased by 13 ETH
+undefined
+> 
+> 

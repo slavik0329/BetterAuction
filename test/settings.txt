@@ -1,0 +1,7 @@
+IPCFILE=ipc:./testchain/geth.ipc
+PASSWORD=testtest
+
+BETTERAUCTIONSOL=BetterAuction.sol
+INCLUDEJS=./include.js
+TEST1OUTPUT=test1output.txt
+TEST1RESULTS=test1results.txt
