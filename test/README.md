@@ -8,6 +8,8 @@ In one window, run:
 In a second window, run:
     ./01_test1.sh 
 
+The test shows the auction contract working as expected.
+
 Summary of results are in the [test1results.txt](test1results.txt).
 
 Detailed results are in the [test1output.txt](test1output.txt). 
