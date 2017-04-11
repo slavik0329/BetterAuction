@@ -3,12 +3,14 @@
 These tests should run in recent OS/X or Linux installations.
 
 In one window, run:
+
     ./00_runGeth.sh
 
 In a second window, run:
+
     ./01_test1.sh 
 
-The test shows the auction contract working as expected.
+The tests shows the auction contract working as expected.
 
 Summary of results are in the [test1results.txt](test1results.txt).
 
