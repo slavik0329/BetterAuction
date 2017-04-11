@@ -81,6 +81,7 @@ if (!skipCompletedTests) {
   } else {
     console.log("RESULT: FAIL Test 1.1 - Incorrect parameters (0x0, BIDDINGPERIOD, RECOVERYPERIOD) - fail deployment");
   }
+ console.log("RESULT: ");
 }
 
 if (!skipCompletedTests) {
@@ -113,6 +114,7 @@ if (!skipCompletedTests) {
   } else {
     console.log("RESULT: FAIL Test 1.2 - Incorrect parameters (owner, RECOVERYPERIOD, BIDDINGPERIOD) - fail deployment");
   }
+ console.log("RESULT: ");
 }
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
@@ -146,6 +148,7 @@ if (betterAuctionAddress == null || gasEqualsGasUsed(betterAuction13Tx)) {
 } else {
   console.log("RESULT: PASS Test 1.3 - Correct parameters (owner, BIDDINGPERIOD, RECOVERYPERIOD) - pass deployment");
 }
+console.log("RESULT: ");
 
 var betterAuction = eth.contract(betterAuctionCompiled["<stdin>:BetterAuction"].info.abiDefinition).at(betterAuctionAddress);
 
@@ -165,6 +168,7 @@ if (gasEqualsGasUsed(betterAuction21Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 10 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 10 ETH");
 console.log("RESULT:   CHECK 3. Bidder #1 balance is reduced by 10 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.2 - Bidder #2 bids 5 ETH - failed bid");
@@ -182,6 +186,7 @@ if (gasEqualsGasUsed(betterAuction22Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 10 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 10 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance remains the same");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.3 - Bidder #2 bids 10 ETH - bid failed");
@@ -199,6 +204,7 @@ if (gasEqualsGasUsed(betterAuction23Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 10 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 10 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance remains the same");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.4 - Bidder #2 bids 10.01 ETH - successful bid");
@@ -216,6 +222,7 @@ if (gasEqualsGasUsed(betterAuction24Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 20.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 10.01 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance is reduced by 10.01 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.5 - Bidder #1 tops up bid by 0.01 ETH - failed bid");
@@ -233,6 +240,7 @@ if (gasEqualsGasUsed(betterAuction25Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 20.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 10.01 ETH");
 console.log("RESULT:   CHECK 3. Bidder #1 balance remains the same");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.6 - Bidder #1 tops up bid by 1 ETH - successful bid");
@@ -250,6 +258,7 @@ if (gasEqualsGasUsed(betterAuction26Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 21.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 11 ETH");
 console.log("RESULT:   CHECK 3. Bidder #1 balance is reduced by 1 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.7 - Bidder #3 bids 13 ETH - successful bid");
@@ -267,6 +276,7 @@ if (gasEqualsGasUsed(betterAuction27Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 34.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #3 balance is reduced by 13 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.8 - Bidder #3 withdraws funds - unsuccessful withdrawal");
@@ -284,6 +294,7 @@ if (gasEqualsGasUsed(betterAuction28Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 34.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #3 balance remains the same");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.9 - Bidder #1 withdraws funds - successful withdrawal");
@@ -301,6 +312,7 @@ if (gasEqualsGasUsed(betterAuction29Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 23.01 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #1 balance increases by 11 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.10 - Bidder #2 withdraws funds by calling nonHighestBidderRefund() with 0 ETH - successful withdrawal");
@@ -318,6 +330,7 @@ if (gasEqualsGasUsed(betterAuction210Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 13 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance increases by 10.01 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.11 - Bidder #3 calls the internal BidderUpdateBid function with 20 ETH - unsuccessful call");
@@ -340,6 +353,7 @@ if (betterAuction211Tx == null || gasEqualsGasUsed(betterAuction211Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 13 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #3 balance remains the same");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.12 - Owner calls beneficiaryCloseAuction() before auction closes - unsuccessful");
@@ -356,6 +370,7 @@ if (gasEqualsGasUsed(betterAuction212Tx)) {
 }
 console.log("RESULT:   CHECK 1. Auction contract has 13 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.13 - Owner calls beneficiaryRecoverFunds() before recovery period is active - unsuccessful");
@@ -372,6 +387,7 @@ if (gasEqualsGasUsed(betterAuction213Tx)) {
 }
 console.log("RESULT:   CHECK 1. Auction contract has 13 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 13 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.14 - Bidder #2 bids 50 ETH - successful bid");
@@ -389,6 +405,7 @@ if (gasEqualsGasUsed(betterAuction214Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 63 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 50 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance is reduced by 50 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 2.15 - Bidder #1 bids 100 ETH - successful bid");
@@ -406,6 +423,7 @@ if (gasEqualsGasUsed(betterAuction215Tx)) {
 console.log("RESULT:   CHECK 1. Auction contract has 163 ETH");
 console.log("RESULT:   CHECK 2. Highest bid is 100 ETH");
 console.log("RESULT:   CHECK 3. Bidder #1 balance is reduced by 100 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 3.1 - Owner calls beneficiaryCloseAuction() after auction closes - successful");
@@ -428,6 +446,7 @@ if (gasEqualsGasUsed(betterAuction31Tx)) {
 }
 console.log("RESULT:   CHECK 1. Auction contract has 63 ETH");
 console.log("RESULT:   CHECK 2. Owner balance is increased by 100 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 3.2 - Bidder #2 withdraws funds - successful withdrawal");
@@ -444,6 +463,7 @@ if (gasEqualsGasUsed(betterAuction32Tx)) {
 }
 console.log("RESULT:   CHECK 1. Auction contract has 13 ETH");
 console.log("RESULT:   CHECK 3. Bidder #2 balance increases by 50 ETH");
+console.log("RESULT: ");
 
 console.log("RESULT: --------------------------------------------------------------------------------------");
 console.log("RESULT: Test 3.3 - Owner calls beneficiaryRecoverFunds() when auction recovery period is active - successful");
@@ -466,6 +486,7 @@ if (gasEqualsGasUsed(betterAuction33Tx)) {
 }
 console.log("RESULT:   CHECK 1. Auction contract has 0 ETH");
 console.log("RESULT:   CHECK 2. Owner balance is increased by 13 ETH");
+console.log("RESULT: ");
 
 EOF
 grep "RESULT: " $TEST1OUTPUT | sed "s/RESULT: //" > $TEST1RESULTS

@@ -53,11 +53,6 @@ function printContractDynamicDetails() {
   var highestBidIncreasedEvent = contract.HighestBidIncreased({}, { fromBlock: 0, toBlock: "latest" });
   i = 0;
   highestBidIncreasedEvent.watch(function (error, result) {
-    // console.log("RESULT: highestBidIncreasedEvent " + i++ + ": " + JSON.stringify(result));
-    // RESULT: highestBidIncreasedEvent 0: {"address":"0x03d47b0d78f8dee3089037dffd5c9a1f7e7282af",
-    //   "args":{"amount":"10000000000000000000","bidder":"0x0020017ba4c67f76c76b1af8c41821ee54f37171"},
-    //   "blockHash":"0x6ae4a839e63f80dfd15b785335788b9cfd3b0b5710403cc2b0c120f67dac1f6e","blockNumber":2388,"event":"HighestBidIncreased",
-    //   "logIndex":0,"removed":false,"transactionHash":"0xccd8c1ada9d94f819fcb19aa75f59020e33cf2b22ef78417faad4deea64d3700","transactionIndex":0}
     console.log("RESULT: HighestBidIncreased Event " + i++ + ": " + result.args.bidder + " " + web3.fromWei(result.args.amount, "ether") +
       " block " + result.blockNumber);
   });
@@ -66,11 +61,6 @@ function printContractDynamicDetails() {
   var auctionClosedEvent = contract.AuctionClosed({}, { fromBlock: 0, toBlock: "latest" });
   i = 0;
   auctionClosedEvent.watch(function (error, result) {
-    // console.log("RESULT: auctionClosedEvent " + i++ + ": " + JSON.stringify(result));
-    // auctionClosedEvent 0: {"address":"0x30da52ef30bdaec61b43317cc045e4f267eaf779",
-    // "args":{"amount":"13000000000000000000","winner":"0x004e64833635cd1056b948b57286b7c91e62731c"},
-    // "blockHash":"0xa56f76fbe51ab19a0a1f6b485683b4164d5da2bfc48d0f7d072272bd20bbeb88","blockNumber":99,"event":"AuctionClosed",
-    // "logIndex":0,"removed":false,"transactionHash":"0x8ab2549a38f734f681ddabb1c719ee337e2b35b2cc82fb3ae872b78dad80d002","transactionIndex":0}
     console.log("RESULT: AuctionClosed Event " + i++ + ": " + result.args.winner + " " + web3.fromWei(result.args.amount, "ether") +
       " block " + result.blockNumber);
   });
