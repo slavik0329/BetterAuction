@@ -8,5 +8,7 @@ test/testchain/history
 test/testchain/geth/ethash/*
 test/testchain/geth/chaindata/*
 test/testchain/geth/nodes/*
+test/testchain/geth/nodes/CURRENT
+test/testchain/geth/nodes/LOG
 test/testchain/geth/LOCK
 test/testchain/geth/nodekey
