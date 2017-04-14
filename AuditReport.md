@@ -3,7 +3,7 @@
 * Amir requested for an audit of an auction contract 
 * Steve wrote the inital smart contract
 * There were several cycles of my review, my recommendations, Steve's changes, Amir and Steve's changes to functionality
-* I wrote the test scripts with the main script in [test/00_test1.sh] and the generated results in [test/test1results.txt]
+* I wrote the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
 * Following is a check on the finalised code
 
 
