@@ -58,29 +58,33 @@ My comments in the following code are marked in the lines beginning with `//CHEC
         // Set to true at the end, disallows any change
         bool auctionClosed;
      
-        // CHECK: Ok
+        // CHECK: Ok. Used in beneficiaryRecoverFunds(...) and beneficiaryCloseAuction(...)
         modifier isBeneficiary {
             if (msg.sender != beneficiary) throw;
             _;
         }
      
-        // CHECK: Ok
+        // CHECK: Ok. Used in bidderPlaceBid(...)
         modifier isAuctionActive {
             if (now < auctionStart || now > (auctionStart + biddingPeriod)) throw;
             _;
         }
      
+        // CHECK: Ok. Used in beneficiaryCloseAuction(...)
         modifier isAuctionEnded {
             if (now < (auctionStart + biddingPeriod)) throw;
             _;
         }
      
+        // CHECK: Ok. Used in beneficiaryRecoverFunds(...)
         modifier isRecoveryActive {
             if (now < (auctionStart + recoveryAfterPeriod)) throw;
             _;
         }
     
+        // CHECK: Ok
         event HighestBidIncreased(address bidder, uint256 amount);
+        // CHECK: Ok
         event AuctionClosed(address winner, uint256 amount);
         
         // Auction starts at deployment, runs for _biddingPeriod (seconds from 
