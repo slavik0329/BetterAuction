@@ -166,6 +166,8 @@ contract BetterAuction {
         if (!beneficiary.send(this.balance)) throw;
     }
  
+    // NOTE: The non-highest bidder may call this function after the beneficiary has recovered the funds in the recovery
+    //       period. The ether balance of this contract will be 0 and the send(...) will fail.
     // Withdraw a bid that was overbid.
     function nonHighestBidderRefund() payable {
         var amount = pendingReturns[msg.sender];
@@ -183,9 +185,11 @@ contract BetterAuction {
  
     // Close the auction and receive the highest bid amount
     function beneficiaryCloseAuction() isBeneficiary isAuctionEnded {
+        // CHECK: Can only be called once
         if (auctionClosed) throw;
         auctionClosed = true;
         AuctionClosed(highestBidder, highestBid);
+        // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()()
         if (!beneficiary.send(highestBid)) throw;
     }
  
@@ -200,3 +204,7 @@ contract BetterAuction {
     }
 }
 ```
+
+Note:
+
+* While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract.
