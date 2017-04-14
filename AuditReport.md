@@ -88,6 +88,7 @@ contract BetterAuction {
     // CHECK: Ok
     event AuctionClosed(address winner, uint256 amount);
     
+    // CHECK: Ok. Only called by (normally) the beneficiary
     // Auction starts at deployment, runs for _biddingPeriod (seconds from 
     // auction start), and funds can be recovered after _recoverPeriod 
     // (seconds from auction start)
@@ -104,11 +105,13 @@ contract BetterAuction {
         recoveryAfterPeriod = _recoveryAfterPeriod;
     }
  
+    // CHECK: Ok. Constant function for information only and returning variables set by (normally) the beneficiary
     // Users want to know when the auction ends, seconds from 1970-01-01
     function auctionEndTime() constant returns (uint256) {
         return auctionStart + biddingPeriod;
     }
 
+    // CHECK: Ok. Constant function for information only
     // Users want to know theirs or someones current bid
     function getBid(address _address) constant returns (uint256) {
         if (_address == highestBidder) {
@@ -155,16 +158,23 @@ contract BetterAuction {
         }
     }
 
+    // CHECK: Ok. Can only be called by (normally) the beneficiary when recovery is active
     // Recover any ethers accidentally sent to contract
     function beneficiaryRecoverFunds() isBeneficiary isRecoveryActive {
+        // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()() 
+        // CHECK: Ok. A false return value will result in a throw
         if (!beneficiary.send(this.balance)) throw;
     }
  
     // Withdraw a bid that was overbid.
     function nonHighestBidderRefund() payable {
         var amount = pendingReturns[msg.sender];
+        // CHECK: Ok. The account's balance is checked before trying to send back the refund
         if (amount > 0) {
             pendingReturns[msg.sender] = 0;
+            // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()()
+            // CHECK: Ok. A false return value will result in a throw
+            // CHECK: Ok. The trigger amount is sent back with the amounts contributed
             if (!msg.sender.send(amount + msg.value)) throw;
         } else {
             throw;
