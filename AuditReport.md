@@ -7,6 +7,10 @@
 * Following is a check on the finalised code
 
 
+## Comments On The Source Code
+
+My comments in the following code are marked in the lines beginning with `//CHECK: `
+
     // ------------------------------------------------------------------------
     // BetterAuction
     //
