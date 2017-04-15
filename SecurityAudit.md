@@ -20,19 +20,19 @@ Document status: work in progress
 
 ## Security Overview Of The BetterAuction
 * [x] The smart contract has been kept relatively simple
-* The code has been tested for the normal use cases, and around the boundary use cases
-* The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
-* Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
-* The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
-* The return status from `send(...)` calls are all checked and invalid results will **throw** 
-* Funds are transferred from this auction contract by account holders "pulling" their funds
-  * Only the beneficiary can call `beneficiaryRecoverFunds(...)` to receive the beneficiary's funds
-  * Only the beneficiary can call `beneficiaryCloseAuction(...)` to receive the winning bidder's funds
-  * Non-highest bidders retrieve their funds by calling `nonHighestBidderRefund(...)`
-* There is no logic with potential division by zero errors
-* There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is validated as part of the sent transactions
-* There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
-* Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
+* [x] The code has been tested for the normal use cases, and around the boundary use cases
+* [x] The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
+* [x] Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
+* [x] The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
+* [x] The return status from `send(...)` calls are all checked and invalid results will **throw** 
+* [x] Funds are transferred from this auction contract by account holders "pulling" their funds
+  * [x] Only the beneficiary can call `beneficiaryRecoverFunds(...)` to receive the beneficiary's funds
+  * [x] Only the beneficiary can call `beneficiaryCloseAuction(...)` to receive the winning bidder's funds
+  * [x] Non-highest bidders retrieve their funds by calling `nonHighestBidderRefund(...)`
+* [x] There is no logic with potential division by zero errors
+* [x] There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is validated as part of the sent transactions
+* [x] There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
+* [x] Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
 
 <br />
 
