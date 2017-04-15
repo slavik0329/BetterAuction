@@ -2,18 +2,35 @@
 
 Document status: work in progress
 
+## Background And History
 * Amir requested for an audit of an auction contract 
-* Steve wrote the inital smart contract
-* There were several cycles of my review, my recommendations, Steve's changes, Amir and Steve's changes to functionality
+* Steve wrote the initial smart contract
+* There were several cycles of:
+  * My review and recommended code changes, including:
+    * Moving magic numbers into constants
+    * Moving some logic into modifiers
+    * Code and comment formatting
+    * Logic consistency
+  * Steve's update to the source code
+  * Amir and Steve's changes to functionality
 * I wrote the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
+
+## Security Overview Of The BetterAuction
+* The smart contract has been kept simple
+* The code has been tested for the normal use cases, and around the boundary use cases
+* The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
+* Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
+* The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
+* The return status from `send(...)` calls are all checked and invalid results will **throw** 
 * Sending of ethers
   * Funds are transferred from this auction contract by account holds "pulling" their funds
     * Only the beneficiary can call beneficiaryRecoverFunds(...) to receive the beneficiary's funds
     * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
     * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
-* Following is a check on the finalised code
-* [ ] test
-* [x] test1
+* There is no logic with potential division by zero errors
+* There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is limited by the validation of the transaction
+  * [ ] Check this statement that the VM / Ethereum system prevents false `msg.value` being sent
+* Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character 
 
 
 ## Comments On The Source Code
