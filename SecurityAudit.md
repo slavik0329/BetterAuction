@@ -237,7 +237,7 @@ contract BetterAuction {
 
 Note:
 
-* While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract.
+* While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract. For example see https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/
 * There is the possibility that this miner mining this transaction can skew the 'now' time. This is not so important as it can result in a bidder being allowed to bid after the auction is closed, or a bidders valid bid being rejected due to the skew in the time stamp. However, the skewing of the timestamp should only be valid for -14s to +14s as the timestamp being out of this range would result in the block being invalid if it has to fit between the timestamps of the previous and next miners (out of probability).
 
 References:
