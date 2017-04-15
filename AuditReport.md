@@ -35,7 +35,7 @@ Document status: work in progress
 
 ## Comments On The Source Code
 
-My comments in the following code are marked in the lines beginning with `//CHECK: `
+My comments in the following code are marked in the lines beginning with `//CHECK: ` and `//NOTE: `
 
 ```javascript
 // ------------------------------------------------------------------------
@@ -243,3 +243,6 @@ Note:
 References:
 
 * [Ethereum Contract Security Techniques and Tips](https://github.com/ConsenSys/smart-contract-best-practices)
+
+
+BokkyPooBah / Bok Consulting Pty Ltd 2017
