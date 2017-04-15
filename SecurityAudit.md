@@ -3,10 +3,9 @@
 Document status: work in progress
 
 ## Background And History
-* Mar 20 2017 - Amir requested for an audit of an auction contract 
-* Mar 21 2017 - Steve wrote the initial smart contract
+* Mar 20 2017 Amir requested for an audit of an auction contract 
 * The versions of iterative code changes follow:
-  * Mar 21 2017 [Steve's initial version](https://gist.github.com/slavik0329/857458d42d3c57d7ef2c1e686c2c650d)
+  * Mar 21 2017 [Steve's initial SimpleAuction](https://gist.github.com/slavik0329/857458d42d3c57d7ef2c1e686c2c650d)
   * Mar 21 2017 [Lots of changes from my recommendation, removing magic numbers, modifiers for conditions, code and comment formatting](https://gist.github.com/slavik0329/c61aed6596bde40a3c382bb3a3dff0d1)
   * Mar 22 2017 [SimpleAuction renamed to BetterAuction, functions renamed, bid update logic](https://gist.github.com/slavik0329/58f1944d61d00575476ee47937c3486c)
   * Mar 22 2017 [Adding missing event log](https://gist.github.com/slavik0329/c8523d41e05ff69907e42811be8cb1a2)
@@ -14,25 +13,24 @@ Document status: work in progress
   * Apr 03 2017 [Removing unnecessary +=, tidy](https://gist.github.com/slavik0329/e91516a12d9229fc0828dbda6a76a08e)
   * Apr 03 2017 [Update 0.4.0 to 0.4.8, removing unnecessary +=](https://gist.github.com/slavik0329/66c34a07ea9ed075d99cb2f8648a4ddf)
   * Apr 05 2017 [Addition of header comment](https://github.com/slavik0329/BetterAuction/blob/1c0161fbb288dcdb19906c85538e2a6d5861f82b/betterauction.sol)
-* Apr 11 2017 I completed the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt)
+* Apr 11 2017 I completed the test script [test/00_test1.sh](test/00_test1.sh) and generated result in [test/test1results.txt](test/test1results.txt)
 * Apr 16 2017 I completed this security audit report
 
 <br />
 
 ## Security Overview Of The BetterAuction
-* The smart contract has been kept relatively simple
+* [x] The smart contract has been kept relatively simple
 * The code has been tested for the normal use cases, and around the boundary use cases
 * The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
 * Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
 * The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
 * The return status from `send(...)` calls are all checked and invalid results will **throw** 
-* Funds are transferred from this auction contract by account holds "pulling" their funds
-  * Only the beneficiary can call beneficiaryRecoverFunds(...) to receive the beneficiary's funds
-  * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
-  * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
+* Funds are transferred from this auction contract by account holders "pulling" their funds
+  * Only the beneficiary can call `beneficiaryRecoverFunds(...)` to receive the beneficiary's funds
+  * Only the beneficiary can call `beneficiaryCloseAuction(...)` to receive the winning bidder's funds
+  * Non-highest bidders retrieve their funds by calling `nonHighestBidderRefund(...)`
 * There is no logic with potential division by zero errors
 * There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is validated as part of the sent transactions
-  * [ ] Check this statement that the VM / Ethereum system prevents false `msg.value` being sent
 * There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
 * Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
 
