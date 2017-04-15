@@ -4,6 +4,11 @@
 * Steve wrote the inital smart contract
 * There were several cycles of my review, my recommendations, Steve's changes, Amir and Steve's changes to functionality
 * I wrote the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
+* Sending of ethers
+  * Funds are transferred from this auction contract by account holds "pulling" their funds
+    * Only the beneficiary can call beneficiaryRecoverFunds(...) to receive the beneficiary's funds
+    * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
+    * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
 * Following is a check on the finalised code
 
 
@@ -168,6 +173,8 @@ contract BetterAuction {
  
     // NOTE: The non-highest bidder may call this function after the beneficiary has recovered the funds in the recovery
     //       period. The ether balance of this contract will be 0 and the send(...) will fail.
+    // NOTE: This function can be called at any time, but the non-highest bidder needs to already be stored in the 
+    //       pendingReturns data structure.
     // Withdraw a bid that was overbid.
     function nonHighestBidderRefund() payable {
         var amount = pendingReturns[msg.sender];
@@ -193,6 +200,7 @@ contract BetterAuction {
         if (!beneficiary.send(highestBid)) throw;
     }
  
+    // CHECK: Ok. The bidder can only place their bids when the auction is active.
     // Bidders send their bids to the contract. If this is the trigger amount
     // allow non-highest bidders to withdraw their funds
     function () payable {
@@ -208,3 +216,4 @@ contract BetterAuction {
 Note:
 
 * While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract.
+* There is the possibility that this miner mining this transaction can skew the 'now' time. This is not so important as it can result in a bidder being allowed to bid after the auction is closed, or a bidders valid bid being rejected due to the skew in the time stamp. However, the skewing of the timestamp should only be valid for -14s to +14s as the timestamp being out of this range would result in the block being invalid if it has to fit between the timestamps of the previous and next miners (out of probability).
