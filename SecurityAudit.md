@@ -3,9 +3,9 @@
 Document status: work in progress
 
 ## Background And History
-* Amir requested for an audit of an auction contract 
-* Steve wrote the initial smart contract
-* There were several cycles of:
+* Mar 20 2017 - Amir requested for an audit of an auction contract 
+* Mar 21 2017 - Steve wrote the initial smart contract
+* Mar 21 to Apr 5 2017 - There were several cycles of:
   * My review and recommended code changes, including:
     * Moving magic numbers into constants
     * Moving some logic into modifiers
@@ -13,25 +13,28 @@ Document status: work in progress
     * Logic consistency
   * Steve's update to the source code
   * Amir and Steve's changes to functionality
-* I wrote the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
+* Apr 18 2017 I completed the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
+
+<br />
 
 ## Security Overview Of The BetterAuction
-* The smart contract has been kept simple
+* The smart contract has been kept relatively simple
 * The code has been tested for the normal use cases, and around the boundary use cases
 * The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
 * Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
 * The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
 * The return status from `send(...)` calls are all checked and invalid results will **throw** 
-* Sending of ethers
-  * Funds are transferred from this auction contract by account holds "pulling" their funds
-    * Only the beneficiary can call beneficiaryRecoverFunds(...) to receive the beneficiary's funds
-    * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
-    * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
+* Funds are transferred from this auction contract by account holds "pulling" their funds
+  * Only the beneficiary can call beneficiaryRecoverFunds(...) to receive the beneficiary's funds
+  * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
+  * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
 * There is no logic with potential division by zero errors
-* There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is limited by the validation of the transaction
+* There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is validated as part of the sent transactions
   * [ ] Check this statement that the VM / Ethereum system prevents false `msg.value` being sent
-* Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character 
+* There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
+* Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
 
+<br />
 
 ## Comments On The Source Code
 
@@ -235,7 +238,9 @@ contract BetterAuction {
 }
 ```
 
-Note:
+<br />
+
+## Other Note
 
 * While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract.
   * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
