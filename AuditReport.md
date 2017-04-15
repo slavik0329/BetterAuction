@@ -1,5 +1,7 @@
 # Audit Of The BetterAuction Smart Contract
 
+Document status: work in progress
+
 * Amir requested for an audit of an auction contract 
 * Steve wrote the inital smart contract
 * There were several cycles of my review, my recommendations, Steve's changes, Amir and Steve's changes to functionality
@@ -201,6 +203,7 @@ contract BetterAuction {
     }
  
     // CHECK: Ok. The bidder can only place their bids when the auction is active.
+    // CHECK: Ok. Non-highest bidders can retrieve their funds by sending the trigger amount
     // Bidders send their bids to the contract. If this is the trigger amount
     // allow non-highest bidders to withdraw their funds
     function () payable {

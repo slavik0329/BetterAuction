@@ -3,6 +3,7 @@
 .settings/*
 *.ldb
 *.log
+MyNotes.txt
 test/testchain/geth.ipc
 test/testchain/history
 test/testchain/geth/ethash/*
