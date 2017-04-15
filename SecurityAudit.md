@@ -1,11 +1,11 @@
-# Audit Of The BetterAuction Smart Contract
+# Security Audit Of The BetterAuction Smart Contract
 
 Document status: work in progress
 
 ## Background And History
 * Mar 20 2017 - Amir requested for an audit of an auction contract 
 * Mar 21 2017 - Steve wrote the initial smart contract
-* Mar 21 to Apr 5 2017 - There were several cycles of:
+* Mar 21 to Apr 5 2017 - There were several iterative cycles of:
   * My review and recommended code changes, including:
     * Moving magic numbers into constants
     * Moving some logic into modifiers
@@ -13,7 +13,18 @@ Document status: work in progress
     * Logic consistency
   * Steve's update to the source code
   * Amir and Steve's changes to functionality
-* Apr 18 2017 I completed the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt).
+  * The versions of code follow:
+    * [Steve's initial version](https://gist.github.com/slavik0329/857458d42d3c57d7ef2c1e686c2c650d)
+    * [Steve's second version from my recommendation](https://gist.github.com/slavik0329/c61aed6596bde40a3c382bb3a3dff0d1)
+    * [3](https://gist.github.com/slavik0329/c61aed6596bde40a3c382bb3a3dff0d1)
+    * [4](https://gist.github.com/slavik0329/58f1944d61d00575476ee47937c3486c)
+    * [5](https://gist.github.com/slavik0329/c8523d41e05ff69907e42811be8cb1a2)
+    * [6](https://gist.github.com/slavik0329/a46faaddd029e4adf5f8b29d969a9bbf)
+    * [7](https://gist.github.com/slavik0329/e91516a12d9229fc0828dbda6a76a08e)
+    * [8](https://gist.github.com/slavik0329/66c34a07ea9ed075d99cb2f8648a4ddf)
+    * [9](https://github.com/slavik0329/BetterAuction)
+* Apr 11 2017 I completed the test scripts with the main script in [test/00_test1.sh](test/00_test1.sh) and the generated results in [test/test1results.txt](test/test1results.txt)
+* Apr 16 2017 I completed this security audit report
 
 <br />
 
