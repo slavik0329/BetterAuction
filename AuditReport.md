@@ -12,6 +12,8 @@ Document status: work in progress
     * Only the beneficiary can call beneficiaryCloseAuction(...) to receive the winning bidder's funds
     * Non-highest bidders retrieve their funds by calling nonHighestBidderRefund(...)
 * Following is a check on the finalised code
+* [ ] test
+* [x] test1
 
 
 ## Comments On The Source Code
