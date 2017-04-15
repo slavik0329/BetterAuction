@@ -3,7 +3,6 @@
 .settings/*
 *.ldb
 *.log
-MyNotes.txt
 test/testchain/geth.ipc
 test/testchain/history
 test/testchain/geth/ethash/*
@@ -13,3 +12,4 @@ test/testchain/geth/nodes/CURRENT
 test/testchain/geth/nodes/LOG
 test/testchain/geth/LOCK
 test/testchain/geth/nodekey
+private/*
