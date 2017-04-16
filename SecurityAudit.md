@@ -1,7 +1,5 @@
 # Security Audit Of The BetterAuction Smart Contract
 
-Document status: work in progress
-
 ## Background And History
 * Mar 20 2017 Amir requested for an audit of an auction contract 
 * The versions of iterative code changes follow:
@@ -37,7 +35,7 @@ Document status: work in progress
 ### Other Notes
 * While the BetterAuction Solidity code logic has been audited, there are small possibilities of errors that could compromise the security of this contract. This includes errors in the Solidity to bytecode compilation, errors in the execution of the VM code, or security failures in the Ethereum blockchain
   * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
-* There is also the possibility of a miner mining their transaction and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being acceptedin is not so important as it can result in a bidder being allowed to bid after the auction is closed, or a bidders valid bid being rejected due to the skew in the time stamp. However, the skewing of the timestamp should only be valid for -14s to +14s as the timestamp being out of this range would result in the block being invalid if it has to fit between the timestamps of the previous and next miners (out of probability).
+* There is also the possibility of a miner mining their transaction and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being accepted, and this would be most relevant at the end of the auction period
 
 <br />
 
@@ -250,4 +248,4 @@ contract BetterAuction {
 * [Ethereum Contract Security Techniques and Tips](https://github.com/ConsenSys/smart-contract-best-practices)
 
 
-BokkyPooBah / Bok Consulting Pty Ltd 2017
+(c) BokkyPooBah / Bok Consulting Pty Ltd Apr 16 2017
