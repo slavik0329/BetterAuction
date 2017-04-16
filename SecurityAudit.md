@@ -174,6 +174,14 @@ contract BetterAuction {
         }
     }
 
+    // NOTE: 1. Highest bidder can top up their bid
+    // NOTE: 2. Non-highest bidder can top up their bid if the new total exceeds the 
+    //          highest bid
+    // NOTE: 3. The new highest bid information is stored in the highestBid and highestBidder
+    //          variables
+    // NOTE: 4. The old highest bid information is stored in the pendingReturns mapping
+    // NOTE: 5. Bid updates that don't result in a new highest bid results in a throw
+    //
     // Update highest bid or top up previous bid
     function bidderUpdateBid() internal {
         if (msg.sender == highestBidder) {
@@ -192,7 +200,12 @@ contract BetterAuction {
             throw;
         }
     }
- 
+
+    // NOTE: 1. Highest bidder and non-highest bidder can top up their bids
+    // NOTE: 2. New bids below the highest bid are rejected with a throw
+    // NOTE: 3. The old highest bid information is saved in the pendingReturns mapping
+    // NOTE: 4. The new highest bid is saved in the highestBid and highestBidder variables
+    //
     // Bidders can only place bid while the auction is active 
     function bidderPlaceBid() isAuctionActive payable {
         if ((pendingReturns[msg.sender] > 0 || msg.sender == highestBidder) && msg.value > 0) {
