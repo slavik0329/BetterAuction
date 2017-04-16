@@ -4,21 +4,21 @@
 * Mar 20 2017 Amir requested for an audit of an auction contract 
 * The versions of iterative code changes follow:
   * Mar 21 2017 [Steve's initial SimpleAuction](https://gist.github.com/slavik0329/857458d42d3c57d7ef2c1e686c2c650d)
-  * Mar 21 2017 [Lots of changes from my recommendation, removing magic numbers, modifiers for conditions, code and comment formatting](https://gist.github.com/slavik0329/c61aed6596bde40a3c382bb3a3dff0d1)
+  * Mar 21 2017 [Lots of changes from Bok Consulting's recommendation, removing magic numbers, modifiers for conditions, code and comment formatting](https://gist.github.com/slavik0329/c61aed6596bde40a3c382bb3a3dff0d1)
   * Mar 22 2017 [SimpleAuction renamed to BetterAuction, functions renamed, bid update logic](https://gist.github.com/slavik0329/58f1944d61d00575476ee47937c3486c)
   * Mar 22 2017 [Adding missing event log](https://gist.github.com/slavik0329/c8523d41e05ff69907e42811be8cb1a2)
   * Mar 29 2017 [Check of 0x0 beneficiary in constructor, throw for bids with 0 values](https://gist.github.com/slavik0329/a46faaddd029e4adf5f8b29d969a9bbf)
   * Apr 03 2017 [Removing unnecessary +=, tidy](https://gist.github.com/slavik0329/e91516a12d9229fc0828dbda6a76a08e)
   * Apr 03 2017 [Update 0.4.0 to 0.4.8, removing unnecessary +=](https://gist.github.com/slavik0329/66c34a07ea9ed075d99cb2f8648a4ddf)
   * Apr 05 2017 [Addition of header comment](https://github.com/slavik0329/BetterAuction/blob/1c0161fbb288dcdb19906c85538e2a6d5861f82b/betterauction.sol)
-* Apr 11 2017 I completed the test script [test/00_test1.sh](test/00_test1.sh) and generated result in [test/test1results.txt](test/test1results.txt)
-* Apr 16 2017 I completed this security audit report
+* Apr 11 2017 Bok Consulting completed the test script [test/00_test1.sh](test/00_test1.sh) and generated result in [test/test1results.txt](test/test1results.txt)
+* Apr 16 2017 Bok Consulting completed this security audit report
 
 <br />
 
 ## Security Overview Of The BetterAuction
 * [x] The smart contract has been kept relatively simple
-* [x] The code has been tested for the normal use cases, and around the boundary use cases
+* [x] The code has been tested for the normal use cases, and around the boundary cases
 * [x] The testing has been done using geth 1.5.9-stable and solc 0.4.9+commit.364da425.Darwin.appleclang instead of one of the testing frameworks and JavaScript VMs to simulate the live environment as closely as possible
 * [x] Only the `send(...)` call has been used instead of `call.value()()` for transferring funds with limited gas to minimise reentrancy attacks
 * [x] The `send(...)` calls are the last statements in the control flow to prevent the hijacking of the control flow
@@ -278,7 +278,7 @@ contract BetterAuction {
 
 <br />
 
-## References:
+## References
 
 * [Ethereum Contract Security Techniques and Tips](https://github.com/ConsenSys/smart-contract-best-practices)
 
