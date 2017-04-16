@@ -11,7 +11,7 @@
   * Apr 03 2017 [Removing unnecessary +=, tidy](https://gist.github.com/slavik0329/e91516a12d9229fc0828dbda6a76a08e)
   * Apr 03 2017 [Update 0.4.0 to 0.4.8, removing unnecessary +=](https://gist.github.com/slavik0329/66c34a07ea9ed075d99cb2f8648a4ddf)
   * Apr 05 2017 [Addition of header comment](https://github.com/slavik0329/BetterAuction/blob/1c0161fbb288dcdb19906c85538e2a6d5861f82b/betterauction.sol)
-* Apr 11 2017 Bok Consulting completed the test script [test/01_test1.sh](test/01_test1.sh) and generated result in [test/test1results.txt](test/test1results.txt)
+* Apr 11 2017 Bok Consulting completed the test script [test/01_test1.sh](test/01_test1.sh) with the generated result documented in [test/test1results.txt](test/test1results.txt)
 * Apr 16 2017 Bok Consulting completed this security audit report
 
 <br />
