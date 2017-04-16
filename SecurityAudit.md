@@ -36,7 +36,7 @@
 ### Other Notes
 * While the BetterAuction Solidity code logic has been audited, there are small possibilities of errors that could compromise the security of this contract. This includes errors in the Solidity to bytecode compilation, errors in the execution of the VM code, or security failures in the Ethereum blockchain
   * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
-* There is also the possibility of a miner mining their transaction and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being accepted, and this would be most relevant at the end of the auction period
+* There is the possibility of a miner mining a block and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being accepted, and this would be most relevant at the end of the auction period
 
 <br />
 
