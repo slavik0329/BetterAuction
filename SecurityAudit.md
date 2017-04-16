@@ -28,6 +28,7 @@
   * [x] Only the beneficiary can call `beneficiaryCloseAuction(...)` to receive the winning bidder's funds
   * [x] Non-highest bidders retrieve their funds by calling `nonHighestBidderRefund(...)`
 * [x] There is no logic with potential division by zero errors
+* [x] All numbers used are uint256, so there is no potential errors from type conversions
 * [x] There is no logic with potential overflow errors, as the numbers added are taken from the value of ethers sent in each transaction, and this value is validated as part of the sent transactions
 * [x] There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
 * [x] Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
