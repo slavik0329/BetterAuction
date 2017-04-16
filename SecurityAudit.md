@@ -1,5 +1,22 @@
 # Security Audit Of The BetterAuction Smart Contract
 
+The BetterAuction smart contract allows the owner (beneficiary) to conduct an auction of a digital (or not) asset on the Ethereum blockchain. Bidders can send ethers to the smart contract and the highest bid is locked in the smart contract. Non-highest bids can deposit further ethers or withdraw their deposit ethers by sending a withdrawal trigger amount. At the end of the auction period, the beneficiary closes the auction to receive the highest bidder's ethers. The other non-highest bidders can still withdraw their bid amounts. After a period, the beneficiary can recover all funds and send the appropriate amounts to the non-highest bidders if these individuals have not claimed their non-highest bids.
+
+<br />
+
+<hr />
+
+**Table of contents**
+* [Background And History](#background-and-history)
+* [Security Overview Of The BetterAuction](#security-overview-of-the-betterauction)
+  * [Other Notes](#other-notes)
+* [Comments On The Source Code](#comments-on-the-source-code)
+* [References](#references)
+
+<br />
+
+<hr />
+
 ## Background And History
 * Mar 20 2017 Amir requested for an audit of an auction contract 
 * The versions of iterative code changes follow:
