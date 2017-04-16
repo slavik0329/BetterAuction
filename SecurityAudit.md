@@ -34,6 +34,11 @@ Document status: work in progress
 * [x] There is no logic with potential underflow errors, as the numbers are taken from the actual value of ethers sent in each transaction, and this value is validated as part of the sent transactions
 * [x] Function and event names are differentiated by case - function names begin with a lowercase character and event names begin with an uppercase character
 
+### Other Notes
+* While the BetterAuction Solidity code logic has been audited, there are small possibilities of errors that could compromise the security of this contract. This includes errors in the Solidity to bytecode compilation, errors in the execution of the VM code, or security failures in the Ethereum blockchain
+  * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
+* There is also the possibility of a miner mining their transaction and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being acceptedin is not so important as it can result in a bidder being allowed to bid after the auction is closed, or a bidders valid bid being rejected due to the skew in the time stamp. However, the skewing of the timestamp should only be valid for -14s to +14s as the timestamp being out of this range would result in the block being invalid if it has to fit between the timestamps of the previous and next miners (out of probability).
+
 <br />
 
 ## Comments On The Source Code
@@ -240,13 +245,7 @@ contract BetterAuction {
 
 <br />
 
-## Other Note
-
-* While the smart contract logic has been checked, there are still possibilities of errors in Solidity compilation, the execution of the VM code, or even in the Ethereum blockchain security, that could compromise the security of this contract.
-  * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
-* There is the possibility that this miner mining this transaction can skew the 'now' time. This is not so important as it can result in a bidder being allowed to bid after the auction is closed, or a bidders valid bid being rejected due to the skew in the time stamp. However, the skewing of the timestamp should only be valid for -14s to +14s as the timestamp being out of this range would result in the block being invalid if it has to fit between the timestamps of the previous and next miners (out of probability).
-
-References:
+## References:
 
 * [Ethereum Contract Security Techniques and Tips](https://github.com/ConsenSys/smart-contract-best-practices)
 
