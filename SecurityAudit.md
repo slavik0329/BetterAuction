@@ -41,7 +41,7 @@
 
 ## Comments On The Source Code
 
-My comments in the following code are marked in the lines beginning with `//CHECK: ` and `//NOTE: `
+My comments in the following code are marked in the lines beginning with `// NOTE: `
 
 ```javascript
 // ------------------------------------------------------------------------
@@ -91,36 +91,50 @@ contract BetterAuction {
     // Set to true at the end, disallows any change
     bool auctionClosed;
  
-    // CHECK: Ok. Used in beneficiaryRecoverFunds(...) and beneficiaryCloseAuction(...)
+    // NOTE: 1. Used in beneficiaryRecoverFunds(...) and beneficiaryCloseAuction(...)
+    //          to only allow the beneficiary to execute these functions
+    //
     modifier isBeneficiary {
         if (msg.sender != beneficiary) throw;
         _;
     }
  
-    // CHECK: Ok. Used in bidderPlaceBid(...)
+    // NOTE: 1. Used in bidderPlaceBid(...) to allow bids to be placed
+    //          when the auction is active
+    //
     modifier isAuctionActive {
         if (now < auctionStart || now > (auctionStart + biddingPeriod)) throw;
         _;
     }
  
-    // CHECK: Ok. Used in beneficiaryCloseAuction(...)
+    // NOTE: 1. Used in beneficiaryCloseAuction(...) to allow the beneficiary to
+    //          close the auction after the auction has ended
+    //
     modifier isAuctionEnded {
         if (now < (auctionStart + biddingPeriod)) throw;
         _;
     }
  
-    // CHECK: Ok. Used in beneficiaryRecoverFunds(...)
+    // NOTE: 1. Used in beneficiaryRecoverFunds(...) to allow the beneficiary to
+    //          retrieve all remaining funds
+    //
     modifier isRecoveryActive {
         if (now < (auctionStart + recoveryAfterPeriod)) throw;
         _;
     }
 
-    // CHECK: Ok
+    // NOTE: 1. Event starts with an uppercase character
+    //
     event HighestBidIncreased(address bidder, uint256 amount);
-    // CHECK: Ok
+    // NOTE: 1. Event starts with an uppercase character
+    //
     event AuctionClosed(address winner, uint256 amount);
     
-    // CHECK: Ok. Only called by (normally) the beneficiary
+    // NOTE: 1. Constructor function that can only be called by (normally) the beneficiary
+    // NOTE: 2. There is a check for 0x0 addresses
+    // NOTE: 3. There is a check that the recovery period can only start after the auction
+    //          period is over
+    //
     // Auction starts at deployment, runs for _biddingPeriod (seconds from 
     // auction start), and funds can be recovered after _recoverPeriod 
     // (seconds from auction start)
@@ -137,13 +151,19 @@ contract BetterAuction {
         recoveryAfterPeriod = _recoveryAfterPeriod;
     }
  
-    // CHECK: Ok. Constant function for information only and returning variables set by (normally) the beneficiary
+    // NOTE: 1. Constant function for information only
+    // NOTE: 2. Can be called by anyone
+    // NOTE: 3. Returns values from variables set by the beneficiary
+    //
     // Users want to know when the auction ends, seconds from 1970-01-01
     function auctionEndTime() constant returns (uint256) {
         return auctionStart + biddingPeriod;
     }
 
-    // CHECK: Ok. Constant function for information only
+    // NOTE: 1. Constant function for information only
+    // NOTE: 2. Can be called by anyone
+    // NOTE: 3. Returns information on the bidder and other bidder's information
+    //
     // Users want to know theirs or someones current bid
     function getBid(address _address) constant returns (uint256) {
         if (_address == highestBidder) {
@@ -190,45 +210,60 @@ contract BetterAuction {
         }
     }
 
-    // CHECK: Ok. Can only be called by (normally) the beneficiary when recovery is active
+    // NOTE: 1. The beneficiary can call this function when recovery is active
+    // NOTE: 2. The send(...) function with limited gas is used instead of call.value()()
+    // NOTE: 3. The send(...) function is called at the end of the control flow
+    // NOTE: 4. The send(...) function status is checked and will throw on errors
+    //
     // Recover any ethers accidentally sent to contract
     function beneficiaryRecoverFunds() isBeneficiary isRecoveryActive {
-        // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()() 
-        // CHECK: Ok. A false return value will result in a throw
         if (!beneficiary.send(this.balance)) throw;
     }
  
-    // NOTE: The non-highest bidder may call this function after the beneficiary has recovered the funds in the recovery
-    //       period. The ether balance of this contract will be 0 and the send(...) will fail.
-    // NOTE: This function can be called at any time, but the non-highest bidder needs to already be stored in the 
-    //       pendingReturns data structure.
+    // NOTE: 1. The non-highest bidder can call this function after they have placed a bid and
+    //          their bid is not the highest bid and they have not already withdrawn their funds
+    // NOTE: 2. The non-highest bidder may call this function after the beneficiary has 
+    //          recovered the funds in the recovery period. The ether balance of this contract 
+    //          will be 0 and the send(...) will fail with a throw
+    // NOTE: 3. The send(...) function with limited gas is used instead of call.value()()
+    // NOTE: 4. The send(...) function is called at the end of the control flow
+    // NOTE: 5. The send(...) function status is checked and will throw on errors
+    // NOTE: 6. The trigger amount is sent back to the non-highest bidder if the call was
+    //          made to the default () function with the trigger amount
+    // NOTE: 7. The non-highest bidder can call this function directly without supplying the
+    //          trigger amount
+    //
     // Withdraw a bid that was overbid.
     function nonHighestBidderRefund() payable {
         var amount = pendingReturns[msg.sender];
-        // CHECK: Ok. The account's balance is checked before trying to send back the refund
         if (amount > 0) {
             pendingReturns[msg.sender] = 0;
-            // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()()
-            // CHECK: Ok. A false return value will result in a throw
-            // CHECK: Ok. The trigger amount is sent back with the amounts contributed
             if (!msg.sender.send(amount + msg.value)) throw;
         } else {
             throw;
         }
     }
  
+    // NOTE: 1. The auction can only be closed once by the beneficiary
+    // NOTE: 2. The auction can only be closed after the auction has ended
+    // NOTE: 3. The send(...) function with limited gas is used instead of call.value()()
+    // NOTE: 4. The send(...) function is called at the end of the control flow
+    // NOTE: 5. The send(...) function status is checked and will throw on errors
+    //
     // Close the auction and receive the highest bid amount
     function beneficiaryCloseAuction() isBeneficiary isAuctionEnded {
-        // CHECK: Can only be called once
         if (auctionClosed) throw;
         auctionClosed = true;
         AuctionClosed(highestBidder, highestBid);
-        // CHECK: Ok. The safer send(...) function with enough gas to log an event is used instead of call.value()()
         if (!beneficiary.send(highestBid)) throw;
     }
  
-    // CHECK: Ok. The bidder can only place their bids when the auction is active.
-    // CHECK: Ok. Non-highest bidders can retrieve their funds by sending the trigger amount
+    // NOTE: 1. The bidder can only place their bids when the auction is active
+    // NOTE: 2. Non-highest bidders can retrieve their funds by sending the trigger amount after
+    //          they have placed their bid and their bid is not the highest bid, and the funds 
+    //          have not been recovered by the beneficiary after the auction ends and the
+    //          recovery period is active
+    //
     // Bidders send their bids to the contract. If this is the trigger amount
     // allow non-highest bidders to withdraw their funds
     function () payable {
@@ -249,4 +284,4 @@ contract BetterAuction {
 
 <br />
 
-(c) BokkyPooBah / Bok Consulting Pty Ltd Apr 16 2017
+(c) BokkyPooBah / Bok Consulting Pty Ltd - Apr 16 2017
