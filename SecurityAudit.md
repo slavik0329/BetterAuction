@@ -33,6 +33,8 @@ The BetterAuction smart contract allows the owner (beneficiary) to conduct an au
 
 <br />
 
+<hr />
+
 ## Security Overview Of The BetterAuction
 * [x] The smart contract has been kept relatively simple
 * [x] The code has been tested for the normal use cases, and around the boundary cases
@@ -58,6 +60,8 @@ The BetterAuction smart contract allows the owner (beneficiary) to conduct an au
 * Some of the recommended code changes, the testing and the security audit were conducted by the same individual, BokkyPooBah / Bok Consulting, and this is a potential conflict of interest
 
 <br />
+
+<hr />
 
 ## Comments On The Source Code
 
@@ -310,6 +314,8 @@ contract BetterAuction {
 ```
 
 <br />
+
+<hr />
 
 ## References
 
