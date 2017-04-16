@@ -247,5 +247,6 @@ contract BetterAuction {
 
 * [Ethereum Contract Security Techniques and Tips](https://github.com/ConsenSys/smart-contract-best-practices)
 
+<br />
 
 (c) BokkyPooBah / Bok Consulting Pty Ltd Apr 16 2017
