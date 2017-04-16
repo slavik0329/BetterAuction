@@ -57,7 +57,7 @@ The BetterAuction smart contract allows the owner (beneficiary) to conduct an au
   * For example see [Security Alert – Solidity – Variables can be overwritten in storage](https://blog.ethereum.org/2016/11/01/security-alert-solidity-variables-can-overwritten-storage/)
 * There is the possibility of a miner mining a block and skewing the `now` timestamp. This can result valid bids being rejected and invalid bids being accepted, and this would be most relevant at the end of the auction period
 * If possible, run a [bug bounty program](https://github.com/ConsenSys/smart-contract-best-practices#bug-bounty-programs) on this contract code
-* Some of the recommended code changes, the testing and the security audit were conducted by the same individual, BokkyPooBah / Bok Consulting, and this is a potential conflict of interest
+* Some of the recommended code changes, the testing and the security audit were conducted by the Bok Consulting, and this is a potential conflict of interest
 
 <br />
 
@@ -323,4 +323,4 @@ contract BetterAuction {
 
 <br />
 
-(c) BokkyPooBah / Bok Consulting Pty Ltd - Apr 16 2017
+(c) Bok Consulting Pty Ltd - Apr 16 2017
