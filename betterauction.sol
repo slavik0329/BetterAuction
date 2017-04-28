@@ -26,16 +26,22 @@
 pragma solidity ^0.4.8;
 
 contract BetterAuction {
-    // Auction beneficiary
-    address public beneficiary;
+    // Mapping for members of multisig
+    mapping (address => bool) public members;
     // Auction start time, seconds from 1970-01-01
     uint256 public auctionStart;
     // Auction bidding period in seconds, relative to auctionStart
     uint256 public biddingPeriod;
-    // Period after auction ends when the beneficiary can withdraw all funds, relative to auctionStart
+    // Period after auction ends when the multisig proposals can withdraw all funds, relative to auctionStart
     uint256 public recoveryAfterPeriod;
     // User sends this amount to the contract to withdraw funds, 0.0001 ETH
     uint256 public constant WITHDRAWAL_TRIGGER_AMOUNT = 100000000000000;
+    // Number of required signatures
+    uint256 public constant REQUIRED_SIGNATURES = 2;
+    // Proposal to spend
+    Proposal[] public proposals;
+    // Number of proposals
+    uint256 public numProposals;
     // Address of the highest bidder
     address public highestBidder;
     // Highest bid amount
@@ -44,9 +50,16 @@ contract BetterAuction {
     mapping(address => uint256) pendingReturns;
     // Set to true at the end, disallows any change
     bool auctionClosed;
+
+    struct Proposal {
+        address recipient;
+        uint256 numVotes;
+        mapping (address => bool) voted;
+        bool isRecover;
+    }
  
-    modifier isBeneficiary {
-        if (msg.sender != beneficiary) throw;
+    modifier isMember {
+        if (members[msg.sender] == false) throw;
         _;
     }
  
@@ -59,25 +72,26 @@ contract BetterAuction {
         if (now < (auctionStart + biddingPeriod)) throw;
         _;
     }
- 
-    modifier isRecoveryActive {
-        if (now < (auctionStart + recoveryAfterPeriod)) throw;
-        _;
-    }
 
     event HighestBidIncreased(address bidder, uint256 amount);
     event AuctionClosed(address winner, uint256 amount);
-    
+    event ProposalAdded(uint proposalID, address recipient);
+    event Voted(uint proposalID, address voter);
+
     // Auction starts at deployment, runs for _biddingPeriod (seconds from 
     // auction start), and funds can be recovered after _recoverPeriod 
     // (seconds from auction start)
     function BetterAuction(
-        address _beneficiary,
+        address _address1,
+        address _address2,
+        address _address3,
         uint256 _biddingPeriod,
         uint256 _recoveryAfterPeriod
     ) {
-        if (_beneficiary == 0) throw;
-        beneficiary = _beneficiary;
+        if (_address1 == 0 || _address2 == 0 || _address3 == 0) throw;
+        members[_address1] = true;
+        members[_address2] = true;
+        members[_address3] = true;
         auctionStart = now;
         if (_biddingPeriod > _recoveryAfterPeriod) throw;
         biddingPeriod = _biddingPeriod;
@@ -134,11 +148,6 @@ contract BetterAuction {
             HighestBidIncreased(msg.sender, msg.value);
         }
     }
-
-    // Recover any ethers accidentally sent to contract
-    function beneficiaryRecoverFunds() isBeneficiary isRecoveryActive {
-        if (!beneficiary.send(this.balance)) throw;
-    }
  
     // Withdraw a bid that was overbid.
     function nonHighestBidderRefund() payable {
@@ -150,13 +159,42 @@ contract BetterAuction {
             throw;
         }
     }
- 
-    // Close the auction and receive the highest bid amount
-    function beneficiaryCloseAuction() isBeneficiary isAuctionEnded {
-        if (auctionClosed) throw;
-        auctionClosed = true;
-        AuctionClosed(highestBidder, highestBid);
-        if (!beneficiary.send(highestBid)) throw;
+
+    // Multisig member creates a proposal to send ether out of the contract
+    function createProposal (address recipient, bool isRecover) isMember isAuctionEnded {
+        var proposalID = proposals.length++;
+        Proposal p = proposals[proposalID];
+        p.recipient = recipient;
+        p.voted[msg.sender] = true;
+        p.numVotes = 1;
+        numProposals++;
+        Voted(proposalID, msg.sender);
+        ProposalAdded(proposalID, recipient);
+    }
+
+    // Multisig member votes on a proposal
+    function voteProposal (uint256 proposalID) isMember isAuctionEnded {
+        Proposal p = proposals[proposalID];
+        
+        if ( p.voted[msg.sender] ) throw;
+        p.voted[msg.sender] = true;
+        p.numVotes++;
+
+        // Required signatures have been met
+        if (p.numVotes >= REQUIRED_SIGNATURES) {
+            if ( p.isRecover ) {
+                // Is it too early for recovery?
+                if (now < (auctionStart + recoveryAfterPeriod)) throw;
+                // Recover any ethers accidentally sent to contract
+                if (!p.recipient.send(this.balance)) throw;
+            } else {
+                if (auctionClosed) throw;
+                auctionClosed = true;
+                AuctionClosed(highestBidder, highestBid);
+                // Send highest bid to recipient
+                if (!p.recipient.send(highestBid)) throw;
+            }
+        }
     }
  
     // Bidders send their bids to the contract. If this is the trigger amount
